@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Param, Patch, Delete } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Post, Body, Param, Patch, Delete, UseGuards } from '@nestjs/common';
+import { ApiOperation, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { Mesa } from '@prisma/client';
 import { CriarMesaDto } from './dto/criar-mesa.dto';
 import { UpdateMesaDto } from './dto/update-mesa.dto';
 import { MesaService } from './mesa.service';
+import { AuthGuard } from '@nestjs/passport';
 
 
 
@@ -25,6 +26,8 @@ create(@Body() criarMesaDto: CriarMesaDto, userId: string){
 @ApiOperation({
   summary: 'Listar todas as mesas',
 })
+@ApiBearerAuth()
+@UseGuards(AuthGuard())
 findMany(): Promise<Mesa[]>{
   return this.mesaService.findMany()
 }
@@ -33,6 +36,8 @@ findMany(): Promise<Mesa[]>{
 @ApiOperation({
   summary: 'Listar uma mesa',
 })
+@ApiBearerAuth()
+@UseGuards(AuthGuard())
 findUnique(@Param('id') userId: string): Promise<Mesa>{
 return this.mesaService.findUnique(userId);
 }
@@ -41,6 +46,8 @@ return this.mesaService.findUnique(userId);
 @ApiOperation({
   summary: 'Alterar os dados da mesa'
 })
+@ApiBearerAuth()
+@UseGuards(AuthGuard())
 update(@Param('id') userId: string, @Body() updateMesaDto: UpdateMesaDto): Promise<Mesa>{
 return this.mesaService.update(userId, updateMesaDto)
 }
@@ -49,6 +56,8 @@ return this.mesaService.update(userId, updateMesaDto)
 @ApiOperation({
   summary: 'Fechar uma mesa'
 })
+@ApiBearerAuth()
+@UseGuards(AuthGuard())
 delete(@Param('id') mesaId: string): Promise<Mesa>{
   return this.mesaService.delete(mesaId)
 }

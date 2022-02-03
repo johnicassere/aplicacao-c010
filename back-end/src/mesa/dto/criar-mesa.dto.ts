@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsBoolean, IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { IsBoolean, IsNotEmpty, IsNumber, IsString, IsArray } from "class-validator";
 
 
 export class CriarMesaDto{
@@ -19,5 +19,10 @@ export class CriarMesaDto{
     @ApiProperty()
     @IsString()
     descricao: string;
+
+    @IsNotEmpty()
+    @IsArray()
+    @ApiProperty()
+    menus: number[];
 
 }

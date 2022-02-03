@@ -33,6 +33,7 @@ model Mesa {
   updatedAt  DateTime @updatedAt
   menus      Menu[]
 
+
   User   User?   @relation(fields: [userId], references: [id])
   userId String?
   @@map("mesa")
@@ -48,9 +49,8 @@ model Menu {
   observacao String?
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+  mesas      Mesa[]
 
 
-  Mesa   Mesa?   @relation(fields: [mesaId], references: [id])
-  mesaId String?
   @@map("menu")
 }

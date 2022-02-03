@@ -9,7 +9,7 @@ import { UpdateMesaDto } from './dto/update-mesa.dto';
 export class MesaService {
     constructor(private prismaService: PrismaService){}
 
- async create(criarMesaDto: CriarMesaDto, userId: string): Promise<Mesa>{
+ async create(criarMesaDto: CriarMesaDto, mesaId: string): Promise<Mesa>{
   const mesaExists = await this.prismaService.mesa.findFirst({
     where: { numeroMesa: criarMesaDto.numeroMesa},
   });
@@ -22,17 +22,18 @@ export class MesaService {
       numeroMesa: criarMesaDto.numeroMesa,
       livre: criarMesaDto.livre,
       descricao: criarMesaDto.descricao,
-      id: userId,
-      
-      
-     }
+      id: mesaId,
+    },
+    include: {
+      menus: true,
+    }
     });
   return createdMesa;
   }
 
-  async findUnique(userId: string): Promise<Mesa>{
+  async findUnique(mesaId: string): Promise<Mesa>{
     const mesaFinded = await this.prismaService.mesa.findUnique({
-      where: { id: userId }
+      where: { id: mesaId }
     });
     if(!mesaFinded){
       throw new NotFoundException('Mesa nao encontrada')
@@ -45,9 +46,9 @@ export class MesaService {
       return mesas
   }
 
- async update(userId: string, updateMesaDto: UpdateMesaDto ): Promise<Mesa>{
+ async update(mesaId: string, updateMesaDto: UpdateMesaDto ): Promise<Mesa>{
     const mesaFinded = await this.prismaService.mesa.findUnique({
-      where: { id: userId }
+      where: { id: mesaId}
     });
 
     if(!mesaFinded){
@@ -56,7 +57,7 @@ export class MesaService {
 
     const updatedMesa = await this.prismaService.mesa.update({
       
-      where: { id: userId },
+      where: { id: mesaId },
       data: {
         livre: updateMesaDto.livre,
         descricao: updateMesaDto.descricao,

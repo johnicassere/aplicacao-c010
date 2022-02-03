@@ -36,16 +36,30 @@ CREATE TABLE "menu" (
     "observacao" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "mesaId" TEXT,
 
     CONSTRAINT "menu_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "_MenuToMesa" (
+    "A" TEXT NOT NULL,
+    "B" TEXT NOT NULL
 );
 
 -- CreateIndex
 CREATE UNIQUE INDEX "user_email_key" ON "user"("email");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "_MenuToMesa_AB_unique" ON "_MenuToMesa"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_MenuToMesa_B_index" ON "_MenuToMesa"("B");
+
 -- AddForeignKey
 ALTER TABLE "mesa" ADD CONSTRAINT "mesa_userId_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "menu" ADD CONSTRAINT "menu_mesaId_fkey" FOREIGN KEY ("mesaId") REFERENCES "mesa"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "_MenuToMesa" ADD FOREIGN KEY ("A") REFERENCES "menu"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_MenuToMesa" ADD FOREIGN KEY ("B") REFERENCES "mesa"("id") ON DELETE CASCADE ON UPDATE CASCADE;
